@@ -3,34 +3,55 @@ package harborlogix.cargo;
 import harborlogix.clients.Client;
 import harborlogix.ops.TariffPolicy;
 
-/**
- * SKELETON.  Level 3 of the hierarchy.
- *
- * Extra state : targetTempC (must be 8.0 or below), powerDrawKw (positive)
- * Daily fee   : the parent's fee PLUS (POWER_RATE * powerDrawKw)
- *               You must EXTEND the parent's fee, not recompute it.
- * Category    : "Reefer"
- */
-public class RefrigeratedContainer extends StandardContainer {
+public class RefrigeratedContainer extends StandardContainer implements Inspectable {
 
-    // TODO: private final fields
+    private final double targetTempC;
+    private final double powerDrawKw;
 
     public RefrigeratedContainer(String unitId, Client owner, double weightKg,
                                  int daysStored, double volumeM3,
                                  double targetTempC, double powerDrawKw) {
         super(unitId, owner, weightKg, daysStored, volumeM3);
-        // TODO: validate and assign
-        throw new UnsupportedOperationException("TODO RefrigeratedContainer constructor");
+        if (targetTempC > 8.0) {
+            throw new IllegalArgumentException();
+        }
+        if (powerDrawKw <= 0) {
+            throw new IllegalArgumentException();
+        }
+        this.targetTempC = targetTempC;
+        this.powerDrawKw = powerDrawKw;
     }
 
     public double getTargetTempC() {
-        throw new UnsupportedOperationException("TODO getTargetTempC");
+        return targetTempC;
     }
 
     public double getPowerDrawKw() {
-        throw new UnsupportedOperationException("TODO getPowerDrawKw");
+        return powerDrawKw;
     }
 
-    // TODO: override dailyStorageFee() using super.dailyStorageFee()
-    // TODO: override handlingCategory(), safetyBriefing(), toString()
+    @Override
+    public double dailyStorageFee() {
+        return super.dailyStorageFee() + (TariffPolicy.POWER_RATE * powerDrawKw);
+    }
+
+    @Override
+    public String handlingCategory() {
+        return "Reefer";
+    }
+
+    @Override
+    public String safetyBriefing() {
+        return String.format("Maintain target temp: %.1fC", targetTempC);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + String.format(" [temp=%.1fC, power=%.1fkW]", targetTempC, powerDrawKw);
+    }
+
+    @Override
+    public String inspectionNote() {
+        return "Check compressor and power cable integrity.";
+    }
 }

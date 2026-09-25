@@ -1,0 +1,90 @@
+HarborLogix terminal - student 216560284
+
+=== 1. YARD MANIFEST ===
+Standard[id=U-01, owner=Standard Imports, 2000.0 kg, 5 days] [volume=33.2m3]
+Safety: Standard handling procedure.
+Reefer[id=U-02, owner=Global Logistics, 3500.0 kg, 3 days] [volume=33.2m3] [temp=4.0C, power=5.5kW]
+Safety: Maintain target temp: 4.0C
+Hazmat[id=U-03, owner=Ministry of Health, 1500.0 kg, 2 days] [volume=33.2m3] [Hazard Class=3, Escort=true]
+Safety: Hazard Class 3. Escort required: true
+Tank[id=U-04, owner=Global Logistics, 4000.0 kg, 10 days] [Capacity=25000.0L, Fill=80.0%]
+Safety: Liquid Tank Handling Protocol.
+Total Daily Revenue: 2206.73
+
+=== 2. CLIENT INVOICES ===
+Invoice for Standard Imports: 1992.00 NIS
+Invoice for Global Logistics (Discount: 15.0%): 7168.18 NIS
+Invoice for Ministry of Health (Discount: 25.0%): 1015.92 NIS
+
+=== 3. DRAINAGE ROUND ===
+Drained 3000.00 liters from tank U-04. New fill percent: 68.0%
+
+=== 4. PART D - OVERSIZED CARGO ===
+Oversized cargo added successfully. Reprinting manifest:
+
+Standard[id=U-01, owner=Standard Imports, 2000.0 kg, 5 days] [volume=33.2m3]
+Safety: Standard handling procedure.
+Reefer[id=U-02, owner=Global Logistics, 3500.0 kg, 3 days] [volume=33.2m3] [temp=4.0C, power=5.5kW]
+Safety: Maintain target temp: 4.0C
+Hazmat[id=U-03, owner=Ministry of Health, 1500.0 kg, 2 days] [volume=33.2m3] [Hazard Class=3, Escort=true]
+Safety: Hazard Class 3. Escort required: true
+Tank[id=U-04, owner=Global Logistics, 4000.0 kg, 10 days] [Capacity=25000.0L, Fill=68.0%]
+Safety: Liquid Tank Handling Protocol.
+Oversize[id=U-05, owner=Ministry of Health, 12000.0 kg, 1 days] [length=15.5m, crane=true]
+Safety: Heavy crane required: true
+Total Daily Revenue: 2316.23
+
+=== 5. BONUS - INSPECTION NOTES ===
+Inspection for U-02: Check compressor and power cable integrity.
+Inspection for U-03: Verify hazmat placards are visible and seals are intact.
+
+HarborLogix acceptance test
+Student ID declared: 216560284
+--------------------------------------------------
+  PASS  student ID is digits only, at least 2 digits
+  PASS  BASE_STORAGE_RATE derived from D1
+  PASS  POWER_RATE derived from D2
+  PASS  HAZMAT_MULTIPLIER derived from D1
+  PASS  LIQUID_RATE derived from D2
+  PASS  OVERSIZE_DAILY_FLAT derived from D1
+  PASS  YARD_CAPACITY derived from D1
+  PASS  CargoUnit is abstract
+  PASS  RefrigeratedContainer extends StandardContainer (3 levels)
+  PASS  HazmatContainer extends StandardContainer
+  PASS  LiquidTank extends CargoUnit directly
+  PASS  totalStorageCharge() is final
+  PASS  all instance fields are private
+  PASS  standard daily fee
+  PASS  totalStorageCharge = fee x days
+  PASS  reefer fee extends parent fee
+  PASS  reefer costs more than plain container of same volume
+  PASS  hazmat fee multiplies parent fee
+  PASS  tank fee uses actual content
+  PASS  transferOut reduces the daily fee
+  PASS  dispatch through base reference reaches Reefer
+  PASS  dispatch through base reference reaches Tank
+  PASS  toString chain includes subclass detail
+  PASS  hazmat briefing states the class
+  PASS  standard client discount is 0
+  PASS  contract client discount
+  PASS  government client discount
+  PASS  government client has priority
+  PASS  standard client has no priority
+  PASS  tiers are distinct
+  PASS  yard revenue sums polymorphic fees
+  PASS  invoice applies the client's own discount
+  PASS  walk-in invoice has no discount
+  PASS  heaviestUnit returns the heaviest
+  PASS  duplicate unit ID is rejected
+  PASS  over-capacity throws IllegalStateException
+  PASS  negative weight rejected
+  PASS  zero volume rejected
+  PASS  null owner rejected
+  PASS  reefer above 8C rejected
+  PASS  hazard class 0 rejected
+  PASS  fill percent over 100 rejected
+  PASS  contract discount over 40 rejected
+  PASS  blank client name rejected
+--------------------------------------------------
+passed: 44   failed: 0
+RESULT: PASS - conformant. Design marks are assessed separately.

@@ -3,33 +3,52 @@ package harborlogix.cargo;
 import harborlogix.clients.Client;
 import harborlogix.ops.TariffPolicy;
 
-/**
- * SKELETON.  Also a child of StandardContainer - a sibling of the reefer.
- *
- * Extra state : hazardClass (1-9 only), requiresEscort (boolean)
- * Daily fee   : the parent's fee MULTIPLIED by HAZMAT_MULTIPLIER
- * Category    : "Hazmat"
- * Briefing    : must state the hazard class number
- */
-public class HazmatContainer extends StandardContainer {
+public class HazmatContainer extends StandardContainer implements Inspectable {
 
-    // TODO: private final fields
+    private final int hazardClass;
+    private final boolean requiresEscort;
 
     public HazmatContainer(String unitId, Client owner, double weightKg,
                            int daysStored, double volumeM3,
                            int hazardClass, boolean requiresEscort) {
         super(unitId, owner, weightKg, daysStored, volumeM3);
-        // TODO: validate and assign
-        throw new UnsupportedOperationException("TODO HazmatContainer constructor");
+        if (hazardClass < 1 || hazardClass > 9) {
+            throw new IllegalArgumentException();
+        }
+        this.hazardClass = hazardClass;
+        this.requiresEscort = requiresEscort;
     }
 
     public int getHazardClass() {
-        throw new UnsupportedOperationException("TODO getHazardClass");
+        return hazardClass;
     }
 
     public boolean isRequiresEscort() {
-        throw new UnsupportedOperationException("TODO isRequiresEscort");
+        return requiresEscort;
     }
 
-    // TODO: override dailyStorageFee(), handlingCategory(), safetyBriefing(), toString()
+    @Override
+    public double dailyStorageFee() {
+        return super.dailyStorageFee() * TariffPolicy.HAZMAT_MULTIPLIER;
+    }
+
+    @Override
+    public String handlingCategory() {
+        return "Hazmat";
+    }
+
+    @Override
+    public String safetyBriefing() {
+        return String.format("Hazard Class %d. Escort required: %b", hazardClass, requiresEscort);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + String.format(" [Hazard Class=%d, Escort=%b]", hazardClass, requiresEscort);
+    }
+
+    @Override
+    public String inspectionNote() {
+        return "Verify hazmat placards are visible and seals are intact.";
+    }
 }
